@@ -43,7 +43,6 @@ const getProductoById = [
 
 //POST: Validacion
 const createProductos = [
-    body('idproductos').isInt({ min: 1, max: 100000 }).notEmpty(),
     body('rubro').notEmpty(),
     body('nombre').notEmpty(),
     body('precio').notEmpty(),
@@ -57,14 +56,14 @@ const createProductos = [
 
         const nuevoProducto = req.body;
         try {
-            await db.execute('INSERT INTO productos (idproductos, rubro, nombre, precio) VALUES (?, ?, ?, ?)', [
-                nuevoProducto.idproductos,
+            const [ rows,_ ] = await db.execute('INSERT INTO productos (rubro, nombre, precio) VALUES (?, ?, ?)', [
                 nuevoProducto.rubro,
                 nuevoProducto.nombre,
                 nuevoProducto.precio
             ]);
 
             res.status(201).json({
+                id: rows.insertId,
                 ...nuevoProducto,
             });
         } catch (error) {
@@ -78,45 +77,44 @@ const createProductos = [
     }
 ];
 
+// //PUT
+// const updateProductos = [
+//     param('id').isInt({ min: 1, max: 2389489187 }).withMessage('El parámetro id debe ser un número entero entre 1 y 2389489187'),
+//     body('rubro').notEmpty(),
+//     body('nombre').notEmpty(),
+//     body('precio').isFloat({ min: 1, max: 100000000 }).notEmpty(),
+//     async (req, res) => {
+//         const validacion = validationResult(req);
+//         if (!validacion.isEmpty()) {
+//             res.status(400).json({ errors: validacion.errors });
+//             return;
+//         }
 
-//PUT
-const updateProductos = [
-    param('id').isInt({ min: 1, max: 2389489187 }).withMessage('El parámetro id debe ser un número entero entre 1 y 2389489187'),
-    body('rubro').notEmpty(),
-    body('nombre').notEmpty(),
-    body('precio').isFloat({ min: 1, max: 100000000 }).notEmpty(),
-    async (req, res) => {
-        const validacion = validationResult(req);
-        if (!validacion.isEmpty()) {
-            res.status(400).json({ errors: validacion.errors });
-            return;
-        }
+//         const productoId = req.params.id;
+//         const nuevoProducto = req.body;
 
-        const productoId = req.params.id;
-        const nuevoProducto = req.body;
+//         try {
+//             const [rows, _] = await db.execute('SELECT * FROM productos WHERE idproductos = ?', [productoId]);
 
-        try {
-            const [rows, _] = await db.execute('SELECT * FROM productos WHERE idproductos = ?', [productoId]);
+//             if (!rows.length) {
+//                 res.status(404).send({ message: 'Producto no encontrado' });
+//                 return;
+//             }
 
-            if (!rows.length) {
-                res.status(404).send({ message: 'Producto no encontrado' });
-                return;
-            }
+//             await db.execute('UPDATE productos SET rubro = ?, nombre = ?, precio = ? WHERE idproductos = ?', [
+//                 nuevoProducto.rubro,
+//                 nuevoProducto.nombre,
+//                 nuevoProducto.precio,
+//                 productoId
+//             ]);
 
-            await db.execute('UPDATE productos SET rubro = ?, nombre = ?, precio = ? WHERE idproductos = ?', [
-                nuevoProducto.rubro,
-                nuevoProducto.nombre,
-                nuevoProducto.precio,
-                productoId
-            ]);
-
-            res.send({ message: 'Producto actualizado correctamente' });
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Error del servidor.' });
-        }
-    }
-];
+//             res.send({ message: 'Producto actualizado correctamente' });
+//         } catch (error) {
+//             console.error(error);
+//             res.status(500).json({ message: 'Error del servidor.' });
+//         }
+//     }
+// ];
 
 
 //DELETE: Validacion
@@ -179,7 +177,7 @@ export {
     getAllProductos,
     getProductoById,
     createProductos,
-    updateProductos,
+    // updateProductos,
     deleteProducto,
     getAllVentasForProducto
 };

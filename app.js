@@ -18,23 +18,9 @@ app.get("/", (req, res) => {
 });
 
 
-// Rutas
-
-// PRODUCTOS
-app.get('/productos', rutasProductos);
-app.get('/productos/:id',rutasProductos);
-app.post('/productos',rutasProductos);
-app.put('/productos/:id', rutasProductos);
-app.delete('/productos/:id',rutasProductos);
-app.get('/productos/:id/ventas', rutasProductos);
-
-// ventas
-app.get('/ventas', rutasVentas);
-app.get('/ventas/:id',rutasVentas);
-app.post('/ventas',rutasVentas);
-app.put('/ventas/:id',rutasVentas);
-app.delete('/ventas/:id',rutasVentas);
-
+//Rutas 
+app.use(rutasProductos);
+app.use(rutasVentas);
 
 
 
