@@ -21,12 +21,13 @@ USE `laboratorio` ;
 -- Table `laboratorio`.`productos`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `laboratorio`.`productos` (
-  `idproductos` INT NOT NULL,
+  `idproductos` INT NOT NULL AUTO_INCREMENT,
   `rubro` VARCHAR(50) NOT NULL,
   `nombre` VARCHAR(50) NOT NULL,
   `precio` INT NOT NULL,
   PRIMARY KEY (`idproductos`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 6
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -34,11 +35,12 @@ DEFAULT CHARACTER SET = utf8mb3;
 -- Table `laboratorio`.`ventas`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `laboratorio`.`ventas` (
-  `idventas` INT NOT NULL,
+  `idventas` INT NOT NULL AUTO_INCREMENT,
   `fecha` VARCHAR(10) NOT NULL,
   `cliente` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`idventas`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 7
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -51,11 +53,11 @@ CREATE TABLE IF NOT EXISTS `laboratorio`.`ventas_productos` (
   `productos_idproductos` INT NOT NULL,
   `ventas_idventas` INT NOT NULL,
   PRIMARY KEY (`productos_idproductos`, `ventas_idventas`),
-  INDEX `fk_ventas_productos_ventas1_idx` (`ventas_idventas` ASC) VISIBLE,
+  INDEX `fk_ventas_productos_ventas_idx` (`ventas_idventas` ASC) VISIBLE,
   CONSTRAINT `fk_ventas_productos_productos`
     FOREIGN KEY (`productos_idproductos`)
     REFERENCES `laboratorio`.`productos` (`idproductos`),
-  CONSTRAINT `fk_ventas_productos_ventas1`
+  CONSTRAINT `fk_ventas_productos_ventas`
     FOREIGN KEY (`ventas_idventas`)
     REFERENCES `laboratorio`.`ventas` (`idventas`))
 ENGINE = InnoDB
